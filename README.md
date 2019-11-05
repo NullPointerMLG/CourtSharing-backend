@@ -16,6 +16,7 @@ py -3 -m venv venv
 . venv
 
 #On Windows
+#If next command doesn't work run this on powershell: Set-ExecutionPolicy RemoteSigned
 venv\Scripts\activate
 ```
 4. Get dependencies
@@ -32,6 +33,11 @@ flask run
 #On windows cmd
 set FLASK_APP=flaskr
 set FLASK_ENV=development
+flask run
+
+#On windows powershell
+$env:FLASK_APP = "flaskr"
+$env:FLASK_ENV = "development"
 flask run
 ```
 
