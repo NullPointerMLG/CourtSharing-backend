@@ -15,7 +15,7 @@ Click==7.0
 colorama==0.3.7
 compizconfig-python==0.9.13.1
 constantly==15.1.0
-cryptography==2.1.4
+cryptography==2.3
 Cython==0.26.1
 Django==1.11.16
 dnspython==1.16.0
