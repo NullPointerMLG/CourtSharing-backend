@@ -1,16 +1,18 @@
 import os
 
 from flask import Flask
+from config import MONGO_URL
 
+import json
+import datetime
+from bson.objectid import ObjectId
+from flask_pymongo import PyMongo
 
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
-    app.config.from_mapping(
-        SECRET_KEY='dev',
-        DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
-    )
-
+    app.config["MONGO_URI"] = MONGO_URL
+    mongo = PyMongo(app)
     if test_config is None:
         # load the instance config, if it exists, when not testing
         app.config.from_pyfile('config.py', silent=True)
@@ -25,8 +27,10 @@ def create_app(test_config=None):
         pass
 
     # a simple page that says hello
-    @app.route('/hello')
-    def hello():
-        return 'Hello, World!'
-
+    @app.route('/')
+    def home_page():
+        online_users = mongo.db.user.find({"online": True})
+        return json.dumps(online_users)
+        
     return app
+
