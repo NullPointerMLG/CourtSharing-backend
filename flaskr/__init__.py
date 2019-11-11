@@ -2,9 +2,11 @@ import os
 
 from flask import Flask
 from config import MONGO_URL
+from flask import jsonify
 
 import json
 import datetime
+from bson.json_util import dumps
 from bson.objectid import ObjectId
 from flask_pymongo import PyMongo
 
@@ -30,7 +32,6 @@ def create_app(test_config=None):
     @app.route('/')
     def home_page():
         online_users = mongo.db.user.find({"online": True})
-        return json.dumps(online_users)
+        return dumps(online_users)
         
     return app
-
