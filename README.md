@@ -13,7 +13,7 @@ py -3 -m venv venv
 3. Activate environment
 ```
 #On linux
-. venv
+. venv/bin/activate
 
 #On Windows
 #If next command doesn't work run this on powershell: Set-ExecutionPolicy RemoteSigned
