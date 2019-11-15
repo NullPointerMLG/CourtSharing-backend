@@ -25,20 +25,7 @@ pip install -r requirements.txt
 ```
 5. Run Flask
 ```
-#On linux
-export FLASK_APP=flaskr
-export FLASK_ENV=development
-flask run
-
-#On windows cmd
-set FLASK_APP=flaskr
-set FLASK_ENV=development
-flask run
-
-#On windows powershell
-$env:FLASK_APP = "flaskr"
-$env:FLASK_ENV = "development"
-flask run
+python main.py
 ```
 
 Prerrequisites:
