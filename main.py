@@ -1,12 +1,7 @@
-'''
-Main package the deploy a service to request Tensorflow models.
-'''
-
 import os
 
 from flask import Flask
 from config import MONGO_URL
-from flask import jsonify
 
 from flask_restful import Api
 
@@ -25,8 +20,7 @@ APP.config["MONGO_URI"] = MONGO_URL
 mongo = PyMongo(APP)
 
 # Endpoints
-API.add_resource(Event, '/event')
-
+API.add_resource(Event, '/events', resource_class_kwargs={'mongo':mongo})
 
 if __name__ == '__main__':
     print("Deploying service in port 5000")

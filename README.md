@@ -34,3 +34,6 @@ Prerrequisites:
 
 Dependencies:
  - Flask 1.1.1
+ - Flask-RESTful 0.3.7
+ - Flask-PyMongo 2.3.0
+ - PyMongo 3.9.0
