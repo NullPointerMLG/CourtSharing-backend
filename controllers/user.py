@@ -18,3 +18,4 @@ class User(Resource):
             self.mongo.db.user.insert({'UUID':uuid})
             user = self.mongo.db.user.find({'UUID':uuid})
         return dumps(user), 200
+        
