@@ -6,13 +6,14 @@ from config import MONGO_URL
 from flask_restful import Api
 
 from controllers.event import Event
-from controllers.user import User
+from controllers.login import Login
 
 import json
 import datetime
 from bson.json_util import dumps
 from bson.objectid import ObjectId
 from flask_pymongo import PyMongo
+import firebase_admin
 
 APP = Flask(__name__)
 API = Api(APP)
@@ -22,7 +23,7 @@ mongo = PyMongo(APP)
 
 # Endpoints
 API.add_resource(Event, '/events', resource_class_kwargs={'mongo':mongo})
-API.add_resource(User, '/users', resource_class_kwargs={'mongo':mongo})
+API.add_resource(Login, '/login', resource_class_kwargs={'mongo':mongo})
 
 if __name__ == '__main__':
     print("Deploying service in port 5000")
