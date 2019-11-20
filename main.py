@@ -7,6 +7,7 @@ from flask_restful import Api
 
 from controllers.event import Event
 from controllers.court import Court
+from controllers.sport import Sport
 
 
 import json
@@ -24,6 +25,7 @@ mongo = PyMongo(APP)
 # Endpoints
 API.add_resource(Event, '/events', resource_class_kwargs={'mongo':mongo})
 API.add_resource(Court, '/courts', resource_class_kwargs={'mongo':mongo})
+API.add_resource(Sport, '/sports', resource_class_kwargs={'mongo':mongo})
 
 if __name__ == '__main__':
     print("Deploying service in port 5000")
