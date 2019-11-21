@@ -11,16 +11,16 @@ class Event(Resource):
         query = []
         args = request.args
 
-        event_date = args.get('event-date')
+        event_date = args.get('date')
         if event_date is not None:
             query.append({ "$match" : { "eventDate" : int(event_date) } })
         
-        court_id = args.get('court-id')
+        court_id = args.get('court')
         if court_id is not None:
             query.append({ "$match" : { "courtID" : int(court_id) } })
     
         data = self.mongo.db.event.aggregate(query)
-        return dumps(data), 200
+        return eval(dumps(data)), 200
 
     def post(self):
         # TODO: validate parameters
@@ -43,4 +43,4 @@ class Event(Resource):
             "creator": creator
         })
 
-        return dumps(event), 200
+        return eval(dumps(event)), 200
