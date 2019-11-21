@@ -5,9 +5,9 @@ from config import MONGO_URL
 
 from flask_restful import Api
 
-from controllers.event import Event
-from controllers.court import Court
-from controllers.sport import Sport
+from resources.event import Event
+from resources.court import Court
+from resources.sport import Sport
 
 
 import json
