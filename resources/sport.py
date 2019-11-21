@@ -28,9 +28,6 @@ class Sport(Resource):
 
         data = self.mongo.db.sport.aggregate(query) 
         
-<<<<<<< Updated upstream
-        return dumps(data), 200
-=======
         json = eval(dumps(data))
 
         #Esta es una de las formas de hallar el resource_id nos podemos quedar con el 0 pq solo lo vamos a usar cuando busquemos un deporte especific
@@ -40,5 +37,4 @@ class Sport(Resource):
         print(json[0]['resource_id'])
 
         return json, 200
->>>>>>> Stashed changes
 
