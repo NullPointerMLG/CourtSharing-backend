@@ -13,10 +13,10 @@ class Login(Resource):
             firebase_admin.initialize_app()      
 
     def post(self):
-        if(not request.is_json):
+        jsondata = request.get_json(force=True, silent=True)
+        if(jsondata is None):
             with open('utils/errorCodes.json', 'r') as errorCodes:
-                return json.load(errorCodes)['AUTH_ERROR']['VALUE_ERROR'], 500
-        jsondata = request.get_json()
+                return json.load(errorCodes)['AUTH_ERROR']['VALUE_ERROR'], 500        
         try:
             decoded_token = auth.verify_id_token(jsondata['token']) 
             current_user = auth.get_user(decoded_token['uid']) 
@@ -26,7 +26,7 @@ class Login(Resource):
                 User.name = current_user.display_name
                 User.photoURL = current_user.photo_url
                 self.mongo.db.user.insert({'name':current_user.display_name, 'UUID':current_user.uid, 'photoURL':current_user.photo_url})
-            return True
+            return True, 200
         except ValueError:
             with open('utils/errorCodes.json', 'r') as errorCodes:
                 return json.load(errorCodes)['AUTH_ERROR']['VALUE_ERROR'], 500
