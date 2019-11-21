@@ -19,5 +19,5 @@ class Sport(Resource):
 
         data = self.mongo.db.sport.aggregate(query) 
         
-        return dumps(data), 200
+        return eval(dumps(data)), 200
 
