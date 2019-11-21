@@ -23,7 +23,7 @@ class Login(Resource):
                 User.uuid = current_user.uid
                 User.name = current_user.display_name
                 User.photoURL = current_user.photo_url
-                self.mongo.db.user.insert({'name':User.name, 'UUID':User.uuid, 'photoURL':User.photoURL})
+                self.mongo.db.user.insert({'name':current_user.display_name, 'UUID':current_user.uid, 'photoURL':current_user.photo_url})
             return True
         except ValueError:
             return False

@@ -8,7 +8,18 @@ class Event(Resource):
         self.mongo = mongo
 
     def get(self):
-        data = self.mongo.db.event.find()
+        query = []
+        args = request.args
+
+        event_date = args.get('event-date')
+        if event_date is not None:
+            query.append({ "$match" : { "eventDate" : int(event_date) } })
+        
+        court_id = args.get('court-id')
+        if court_id is not None:
+            query.append({ "$match" : { "courtId" : int(court_id) } })
+    
+        data = self.mongo.db.event.aggregate(query)
         return dumps(data), 200
 
     def post(self):
@@ -28,7 +39,7 @@ class Event(Resource):
             "eventDate": event_date,
             "title": title,
             "description": description,
-            "courtId": court_id,
+            "courtID": court_id,
             "creator": creator
         })
 
