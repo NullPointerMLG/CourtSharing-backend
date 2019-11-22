@@ -2,6 +2,8 @@ from flask_restful import Resource, reqparse
 from bson.json_util import dumps
 from flask import request
 import datetime
+from models.event import Event as Event_model
+
 
 class Event(Resource):
     def __init__(self, mongo):
@@ -13,12 +15,12 @@ class Event(Resource):
 
         event_date = args.get('date')
         if event_date is not None:
-            query.append({ "$match" : { "eventDate" : int(event_date) } })
-        
+            query.append({"$match": {"eventDate": int(event_date)}})
+
         court_id = args.get('court')
         if court_id is not None:
-            query.append({ "$match" : { "courtID" : int(court_id) } })
-    
+            query.append({"$match": {"courtID": int(court_id)}})
+
         courts = self.mongo.db.event.aggregate(query)
         data = []
         for court in courts:
@@ -30,23 +32,16 @@ class Event(Resource):
 
     def post(self):
         # TODO: validate parameters
-        event = request.get_json(force=True)
-        creation_date = datetime.datetime.now()
-        event_date = event['eventDate']
-        title = event['title']
-        description = event['description']
-        court_id = event['courtID']
-        creator = event['creator']
+        event_data = request.get_json(force=True, silent=True)
 
-        # TODO: Add error handler
+        new_event = Event_model(
+            creation_date=datetime.datetime.now(),
+            event_date=event_data['eventDate'],
+            title=event_data['title'],
+            description=event_data['description'],
+            courtID=event_data['courtID'],
+            creatorUID=event_data['creator']
+        )
+        new_event.save()
 
-        event = self.mongo.db.event.insert({
-            "creationDate": creation_date   ,
-            "eventDate": event_date,
-            "title": title,
-            "description": description,
-            "courtID": court_id,
-            "creator": creator
-        })
-
-        return eval(dumps(event)), 200
+        return eval(dumps(new_event)), 200

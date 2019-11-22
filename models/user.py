@@ -1,5 +1,5 @@
 from mongoengine import Document
-from mongoengine import DateTimeField, StringField, ReferenceField, ListField
+from mongoengine import StringField
 
 class User(Document):
     uuid = StringField(min_lenght=1, max_length=128, required=True)
