@@ -19,7 +19,13 @@ class Event(Resource):
         if court_id is not None:
             query.append({ "$match" : { "courtID" : int(court_id) } })
     
-        data = self.mongo.db.event.aggregate(query)
+        courts = self.mongo.db.event.aggregate(query)
+        data = []
+        for court in courts:
+            user = self.mongo.db.user.find_one(court['creator'])
+            court['creator'] = user
+            data = court
+
         return eval(dumps(data)), 200
 
     def post(self):
