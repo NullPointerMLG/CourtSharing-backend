@@ -8,6 +8,7 @@ from flask_restful import Api
 from resources.event import Event
 from resources.court import Court
 from resources.sport import Sport
+from resources.login import Login
 
 
 import json
@@ -15,6 +16,7 @@ import datetime
 from bson.json_util import dumps
 from bson.objectid import ObjectId
 from flask_pymongo import PyMongo
+import firebase_admin
 
 APP = Flask(__name__)
 API = Api(APP)
@@ -24,6 +26,7 @@ mongo = PyMongo(APP)
 
 # Endpoints
 API.add_resource(Event, '/events', resource_class_kwargs={'mongo':mongo})
+API.add_resource(Login, '/login', resource_class_kwargs={'mongo':mongo})
 API.add_resource(Court, '/courts', resource_class_kwargs={'mongo':mongo})
 API.add_resource(Sport, '/sports', resource_class_kwargs={'mongo':mongo})
 
