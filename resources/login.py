@@ -25,13 +25,8 @@ class Login(Resource):
                 User.uuid = current_user.uid
                 User.name = current_user.display_name
                 User.photoURL = current_user.photo_url
-<<<<<<< Updated upstream
-                self.mongo.db.user.insert({'name':current_user.display_name, 'UUID':current_user.uid, 'photoURL':current_user.photo_url})
-            return True, 200
-=======
                 self.mongo.db.user.insert({'name':User.name, 'UUID':User.uuid, 'photoURL':User.photoURL})
             return True
->>>>>>> Stashed changes
         except ValueError:
             with open('utils/errorCodes.json', 'r') as errorCodes:
                 return json.load(errorCodes)['AUTH_ERROR']['VALUE_ERROR'], 500
