@@ -4,29 +4,35 @@ import json
 from flask import request
 import firebase_admin
 from firebase_admin import auth
-from models.user import User
+from models.user import User as User_model
+
 
 class Login(Resource):
     def __init__(self, mongo):
         self.mongo = mongo
         if (not len(firebase_admin._apps)):
-            firebase_admin.initialize_app()      
+            firebase_admin.initialize_app()
 
     def post(self):
         jsondata = request.get_json(force=True, silent=True)
         if(jsondata is None):
             with open('utils/errorCodes.json', 'r') as errorCodes:
-                return json.load(errorCodes)['AUTH_ERROR']['VALUE_ERROR'], 500        
+                return json.load(errorCodes)['AUTH_ERROR']['VALUE_ERROR'], 500
+
         try:
-            decoded_token = auth.verify_id_token(jsondata['token']) 
-            current_user = auth.get_user(decoded_token['uid']) 
-            user = self.mongo.db.user.find({'UUID':current_user.uid})    
+            decoded_token = auth.verify_id_token(jsondata['token'])
+            current_user = auth.get_user(decoded_token['uid'])
+
+            user = self.mongo.db.user.find({'UUID': current_user.uid})
             if user.count() == 0:
-                User.uuid = current_user.uid
-                User.name = current_user.display_name
-                User.photoURL = current_user.photo_url
-                self.mongo.db.user.insert({'name':User.name, 'UUID':User.uuid, 'photoURL':User.photoURL})
+                new_user = User_model(
+                    uuid=current_user.uid,
+                    name=current_user.display_name,
+                    photoURL=current_user.photo_url
+                )
+                new_user.save()
             return True
+            
         except ValueError:
             with open('utils/errorCodes.json', 'r') as errorCodes:
                 return json.load(errorCodes)['AUTH_ERROR']['VALUE_ERROR'], 500
@@ -36,4 +42,3 @@ class Login(Resource):
         except auth.CertificateFetchError:
             with open('utils/errorCodes.json', 'r') as errorCodes:
                 return json.load(errorCodes)['AUTH_ERROR']['CERTIFICATE_FETCH_ERROR'], 500
-        
