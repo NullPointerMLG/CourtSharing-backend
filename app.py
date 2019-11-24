@@ -28,7 +28,7 @@ CORS(APP)
 API = Api(APP)
 
 APP.config["MONGO_URI"] = MONGO_URL
-APP.config['MONGODB_SETTINGS'] = {'db':'testing', 'alias':'default'}
+APP.config['MONGODB_SETTINGS'] = {'db': 'testing', 'alias': 'default'}
 
 mongo = PyMongo(APP)
 
