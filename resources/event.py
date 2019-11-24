@@ -26,7 +26,7 @@ class Event(Resource):
         for court in courts:
             user = self.mongo.db.user.find_one(court['creator'])
             court['creator'] = user
-            data = court
+            data.append(court)
 
         return eval(dumps(data)), 200
 

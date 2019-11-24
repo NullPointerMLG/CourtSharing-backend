@@ -17,12 +17,14 @@ from bson.json_util import dumps
 from bson.objectid import ObjectId
 from flask_pymongo import PyMongo
 import firebase_admin
+from flask_cors import CORS
 import mongoengine
 
 if __name__ == '__main__':
     db = mongoengine.connect(alias="default", host=MONGO_URL)
 
 APP = Flask(__name__)
+CORS(APP)
 API = Api(APP)
 
 APP.config["MONGO_URI"] = MONGO_URL
