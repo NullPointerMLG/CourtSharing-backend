@@ -14,7 +14,7 @@ class Sport(Resource):
         query = []
         args = request.args
 
-        sportID = args.get('sport-id')
+        sportID = args.get('id')
         if sportID is not None:
             query.append({"$match": {"_id": ObjectId(sportID)}})
 

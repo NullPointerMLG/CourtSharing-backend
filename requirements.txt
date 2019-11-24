@@ -1,4 +1,4 @@
-﻿aniso8601==8.0.0
+aniso8601==8.0.0
 astroid==2.3.2
 bson==0.5.8
 CacheControl==0.12.5
