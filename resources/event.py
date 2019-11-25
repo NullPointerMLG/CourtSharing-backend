@@ -21,6 +21,10 @@ class Event(Resource):
         if court_id is not None:
             query.append({"$match": {"courtID": int(court_id)}})
 
+        event_sport = args.get('sport')
+        if event_sport is not None:
+            query.append({"$match": {"sport": event_sport}})
+
         courts = self.mongo.db.event.aggregate(query)
         data = []
         for court in courts:
