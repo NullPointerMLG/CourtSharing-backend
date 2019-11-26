@@ -18,6 +18,10 @@ class Sport(Resource):
         if sportID is not None:
             query.append({"$match": {"_id": ObjectId(sportID)}})
 
+        sportName = args.get('name')
+        if sportName is not None:
+            query.append({"$match": {"name": ObjectId(sportID)}})
+
         data = self.mongo.db.sport.aggregate(query)
 
         return eval(dumps(data)), 200
