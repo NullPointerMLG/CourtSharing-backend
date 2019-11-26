@@ -6,13 +6,19 @@ from mongoengine import DoesNotExist
 from models.event import Event as Event_model
 from models.user import User as User_model
 from models.sport import Sport as Sport_model
-
+from utils.auth import Auth
 
 # pylint: disable=E1101
 class Event(Resource):
 
     def get(self):
-        args = request.args
+        args = request.get_json(force=True, silent=True)
+        if(args is None):
+            with open('utils/errorCodes.json', 'r') as errorCodes:
+                return json.load(errorCodes)['AUTH_ERROR']['VALUE_ERROR'], 500
+        token_validation = Auth.auth_token(self, args['token'])
+        if(token_validation != 'True'):
+            return token_validation
 
         event_date = args.get('date')
         court_id = args.get('court')  
@@ -36,7 +42,15 @@ class Event(Resource):
     
     def post(self):
         # TODO: validate parameters
-        event_data = request.get_json(force=True, silent=True)
+        args = request.get_json(force=True, silent=True)
+        if(args is None):
+            with open('utils/errorCodes.json', 'r') as errorCodes:
+                return json.load(errorCodes)['AUTH_ERROR']['VALUE_ERROR'], 500
+        token_validation = Auth.auth_token(self, args['token'])
+        if(token_validation != 'True'):
+            return token_validation
+
+        event_data = args
 
         new_event = Event_model(
             event_date=event_data['event_date'],

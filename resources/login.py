@@ -12,13 +12,13 @@ class Login(Resource):
             firebase_admin.initialize_app()
 
     def post(self):
-        jsondata = request.get_json(force=True, silent=True)
-        if(jsondata is None):
+        args = request.get_json(force=True, silent=True)
+        if(args is None):
             with open('utils/errorCodes.json', 'r') as errorCodes:
                 return json.load(errorCodes)['AUTH_ERROR']['VALUE_ERROR'], 500
         # pylint: disable=E1101
         try:
-            decoded_token = auth.verify_id_token(jsondata['token'])
+            decoded_token = auth.verify_id_token(args['token'])
             current_user = auth.get_user(decoded_token['uid'])
             try:             
                 user = User_model.objects.get(uuid=current_user.uid)
