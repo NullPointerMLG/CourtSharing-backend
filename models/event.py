@@ -1,13 +1,15 @@
 from mongoengine import Document
-from mongoengine import DateTimeField, StringField
+from mongoengine import StringField, IntField, ReferenceField
 from datetime import datetime
-import time
+from models.user import User
+from models.sport import Sport
 
 
 class Event(Document):
-    creation_date = DateTimeField(default=datetime.now(), required=True)
-    event_date = DateTimeField(required=True)
+    creation_date = IntField(default=datetime.now(), required=True)
+    event_date = IntField(required=True)
     title = StringField(max_length=150, required=True)
     description = StringField(max_length=1500)
-    courtID = StringField(required=True)
-    creatorUID = StringField(required=True)
+    court_id = StringField(required=True)
+    creator = ReferenceField(User)
+    sport = ReferenceField(Sport)
