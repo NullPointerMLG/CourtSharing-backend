@@ -112,3 +112,6 @@ config.py
 
 # firebase admin files
 service-account-file.json
+
+# Init script
+run.ps1
