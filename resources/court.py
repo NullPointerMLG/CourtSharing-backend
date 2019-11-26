@@ -1,8 +1,5 @@
-from flask_restful import Resource, reqparse
-from bson.json_util import dumps
-from flask import request
+from flask_restful import Resource
 import requests
-import datetime
 
 
 class Court(Resource):

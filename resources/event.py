@@ -1,13 +1,12 @@
-from flask_restful import Resource, reqparse
+import json
+from flask_restful import Resource
 from bson.json_util import dumps
 from flask import request
-import datetime
+from mongoengine import DoesNotExist
 from models.event import Event as Event_model
 from models.user import User as User_model
 from models.sport import Sport as Sport_model
-from mongoengine import DoesNotExist
-from bson import ObjectId
-import json
+
 
 # pylint: disable=E1101
 class Event(Resource):
@@ -40,7 +39,6 @@ class Event(Resource):
         event_data = request.get_json(force=True, silent=True)
 
         new_event = Event_model(
-            creation_date=datetime.datetime.now(),
             event_date=event_data['event_date'],
             title=event_data['title'],
             description=event_data['description'],

@@ -1,10 +1,9 @@
-from flask_restful import Resource, reqparse
+from flask_restful import Resource
 from bson.json_util import dumps
-from flask import request
 from bson import ObjectId
-import datetime
-from models.sport import Sport as Sport_model
+from flask import request
 from mongoengine import DoesNotExist
+from models.sport import Sport as Sport_model
 
 
 class Sport(Resource):

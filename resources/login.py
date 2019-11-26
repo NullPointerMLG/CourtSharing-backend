@@ -1,15 +1,10 @@
-from flask_restful import Resource, reqparse
-from bson.json_util import dumps
 import json
+from flask_restful import Resource
 from flask import request
 import firebase_admin
 from firebase_admin import auth
-from models.user import User as User_model
-from models.event import Event as Event_model
-from models.sport import Sport as Sport_model
 from mongoengine import DoesNotExist
-import time
-
+from models.user import User as User_model
 
 class Login(Resource):
     def __init__(self):
@@ -34,14 +29,6 @@ class Login(Resource):
                     photo_url=current_user.photo_url
                 )
                 user.save()
-            Event_model(
-                creation_date=int(time.time()),
-                event_date=1554336020,
-                title="Evento2",
-                description="Lore ipsum. Lore ipsum. Lore ipsum. Lore ipsum.Lore ipsum",
-                court_id='Ajedrez',
-                creator=user,              
-            ).save()
             return True          
             
         except ValueError:
