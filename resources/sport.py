@@ -3,21 +3,23 @@ from bson.json_util import dumps
 from flask import request
 from bson import ObjectId
 import datetime
+from models.sport import Sport as Sport_model
+from mongoengine import DoesNotExist
 
 
 class Sport(Resource):
-    def __init__(self, mongo):
-        self.mongo = mongo
 
     def get(self):
-
-        query = []
+    # pylint: disable=E1101      
         args = request.args
+        sport_id = args.get('sport_id')
 
-        sportID = args.get('id')
-        if sportID is not None:
-            query.append({"$match": {"_id": ObjectId(sportID)}})
+        try:
+            query = []
+            if sport_id is not None:
+                query.append({"$match": {"id": ObjectId(sport_id)}})
+        except DoesNotExist:
+            return False
+        sport = eval(dumps(Sport_model.objects.aggregate (*query)))
 
-        data = self.mongo.db.sport.aggregate(query)
-
-        return eval(dumps(data)), 200
+        return sport, 200

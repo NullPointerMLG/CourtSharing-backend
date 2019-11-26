@@ -6,8 +6,6 @@ import datetime
 
 
 class Court(Resource):
-    def __init__(self, mongo):
-        self.mongo = mongo
 
     def get(self):
         response = requests.get(
