@@ -23,16 +23,17 @@ class Event(Resource):
                 query.append({"$match": {"event_date":int(event_date)}})
             if court_id is not None:
                 query.append({"$match": {"court_id":int(court_id)}})
-        except DoesNotExist:
-            return False
 
-        events = eval(dumps(Event_model.objects.aggregate (*query)))       
-        for event in events:
-            query = User_model.objects(id=event['creator']['$oid']) 
-            data = query.to_json()
-            creator = json.loads(data)
-            event['creator'] = creator
-        return events, 200
+            events = eval(dumps(Event_model.objects.aggregate (*query)))   
+            for event in events:
+                query = User_model.objects.get(id=event['creator']['$oid']) 
+                data = query.to_json()
+                creator = json.loads(data)
+                event['creator'] = creator
+            return events, 200
+        except DoesNotExist:
+             with open('utils/errorCodes.json', 'r') as errorCodes:
+                return json.load(errorCodes)['EVENT_ERROR']['NOT_FOUND'], 500
     
     def post(self):
         # TODO: validate parameters

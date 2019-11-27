@@ -12,5 +12,11 @@
             "errorCode": "AUTH_1003",
             "message": "There was an error with the certificate"
         }
+    },
+    "EVENT_ERROR": {
+        "NOT_FOUND": {
+            "errorCode": "AUTH_404",
+            "message": "Event was not found"
+        }
     }
 }
