@@ -5,7 +5,6 @@ import mongoengine
 from resources.event import Event
 from resources.court import Court
 from resources.sport import Sport
-from resources.transport import Transport
 from resources.login import Login
 from config import MONGO_URL
 
