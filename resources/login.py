@@ -18,7 +18,7 @@ class Login(Resource):
                 return json.load(errorCodes)['AUTH_ERROR']['VALUE_ERROR'], 500
         # pylint: disable=E1101
         try:
-            decoded_token = auth.verify_id_token(args['token'])
+            decoded_token = auth.verify_id_token(args['data']['token'])
             current_user = auth.get_user(decoded_token['uid'])
             try:             
                 user = User_model.objects.get(uuid=current_user.uid)
