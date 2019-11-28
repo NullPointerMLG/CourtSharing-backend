@@ -15,8 +15,12 @@
     },
     "EVENT_ERROR": {
         "EMPTY_EVENT_DATA": {
-            "errorCode": "DATA_1001",
+            "errorCode": "EVENT_2001",
             "message": "Event data can't be empty"
+        },
+        "NOT_FOUND": {
+            "errorCode": "EVENT_2404",
+            "message": "Event was not found"
         }
     }
 }
