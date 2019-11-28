@@ -7,17 +7,24 @@ from bson import ObjectId
 from models.event import Event as Event_model
 from models.user import User as User_model
 from models.sport import Sport as Sport_model
-
+from utils.auth import Auth
 
 # pylint: disable=E1101
 class Event(Resource):
 
     def get(self):
-        args = request.args
+        args = request.get_json(force=True, silent=True)
+        headers = request.headers
+        token_validation = Auth.auth_token(headers)
+        if(token_validation != 'True'):
+            return token_validation
 
-        event_date = args.get('date')
-        court_id = args.get('court')  
-        event_sport = args.get('sport')
+        event_date = court_id = event_sport = None
+        if args is not None:
+            event_date = args.get('date')
+            court_id = args.get('court') 
+            event_sport = args.get('sport')
+
         try:          
             query = []
             if event_sport is not None:
@@ -40,7 +47,14 @@ class Event(Resource):
     
     def post(self):
         # TODO: validate parameters
-        event_data = request.get_json(force=True, silent=True)
+        args = request.get_json(force=True, silent=True)
+        token_validation = Auth.auth_token(args)
+        if(token_validation != 'True'):
+            return token_validation
+
+        if args is None:
+            return False, 500
+        event_data = args
 
         new_event = Event_model(
             event_date=event_data['event_date'],

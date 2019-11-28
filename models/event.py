@@ -11,5 +11,5 @@ class Event(Document):
     title = StringField(max_length=150, required=True)
     description = StringField(max_length=1500)
     court_id = StringField(required=True)
-    creator = ReferenceField(User)
-    sport = ReferenceField(Sport)
+    creator = ReferenceField(User, required=True)
+    sport = ReferenceField(Sport, required=True)
