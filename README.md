@@ -23,7 +23,18 @@ venv\Scripts\activate
 ```
 pip install -r requirements.txt
 ```
-5. Run Flask
+5. Export google credentials (Remeber to download it from firebase)
+```
+#On linux
+export GOOGLE_APPLICATION_CREDENTIALS="/home/PATH/serviceAccountKey.json"
+
+#On windows cmd
+set GOOGLE_APPLICATION_CREDENTIALS="C:/PATH/serviceAccountKey.json"
+
+#On windows powershell
+$env:GOOGLE_APPLICATION_CREDENTIALS="C:/PATH/serviceAccountKey.json"
+```
+6. Run Flask
 ```
 python app.py
 ```

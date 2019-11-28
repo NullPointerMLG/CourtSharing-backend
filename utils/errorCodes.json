@@ -1,0 +1,26 @@
+{
+    "AUTH_ERROR": {
+        "VALUE_ERROR": {
+            "errorCode": "AUTH_1001",
+            "message": "Token must be a string and not be empty"
+        },
+        "INVALID_IDTOKEN_ERROR": {
+            "errorCode": "AUTH_1002",
+            "message": "Token is invalid"
+        },
+        "CERTIFICATE_FETCH_ERROR": {
+            "errorCode": "AUTH_1003",
+            "message": "There was an error with the certificate"
+        }
+    },
+    "EVENT_ERROR": {
+        "EMPTY_EVENT_DATA": {
+            "errorCode": "EVENT_2001",
+            "message": "Event data can't be empty"
+        },
+        "NOT_FOUND": {
+            "errorCode": "EVENT_2404",
+            "message": "Event was not found"
+        }
+    }
+}

@@ -1,30 +1,36 @@
-from flask_restful import Resource, reqparse
-from bson.json_util import dumps
 import json
-
-from flask import request
+from flask_restful import Resource
+from bson.json_util import dumps
 from bson import ObjectId
 from flask import request
-import datetime
+from mongoengine import DoesNotExist
+from models.sport import Sport as Sport_model
+from utils.auth import Auth
+
 
 
 
 class Sport(Resource):
 
-    def __init__(self, mongo):
-        self.mongo = mongo
-
 
     def get(self):
+    # pylint: disable=E1101
+        args = request.get_json(force=True, silent=True)
+        headers = request.headers
+        token_validation = Auth.auth_token(headers)
+        if(token_validation != 'True'):
+            return token_validation
 
-        query = []
-        args = request.args
+        sport_id = None
+        if args is not None:
+            sport_id = args.get('sport_id')
 
-        sportID = args.get('sport-id')
-        if sportID is not None:
-            query.append({ "$match" : { "_id" : ObjectId(sportID) } })
+        try:
+            query = []
+            if sport_id is not None:
+                query.append({"$match": {"id": ObjectId(sport_id)}})
+        except DoesNotExist:
+            return False
+        sport = eval(dumps(Sport_model.objects.aggregate (*query)))
 
-        data = self.mongo.db.sport.aggregate(query) 
-
-        return eval(dumps(data)), 200
-
+        return sport, 200

@@ -1,23 +1,24 @@
 from flask_restful import Resource, reqparse
 from bson.json_util import dumps, loads
+import json
 from flask import request
 from bson import ObjectId
 import requests
-import datetime
-import json
+from utils.auth import Auth
 
 class Court(Resource):
 
-    def __init__(self, mongo):
-        self.mongo = mongo
-
     
     def get(self):
+        headers = request.headers
+        token_validation = Auth.auth_token(headers)
+        if(token_validation != 'True'):
+            return token_validation
 
         query = []
         args = request.args
 
-        sportID = args.get('sport-id')
+        sportID = args.get('id')
         if sportID is not None:
             query.append({ "$match" : { "_id" : ObjectId(sportID) } })
 
@@ -39,4 +40,3 @@ class Court(Resource):
             record.pop('DESCRIPCION', None)
             record.pop('CONTACTO', None)
         return data, 200
-
