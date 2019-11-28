@@ -3,6 +3,7 @@ from flask_restful import Resource
 from bson.json_util import dumps
 from flask import request
 from mongoengine import DoesNotExist
+from bson import ObjectId
 from models.event import Event as Event_model
 from models.user import User as User_model
 from models.sport import Sport as Sport_model
@@ -20,7 +21,7 @@ class Event(Resource):
         try:          
             query = []
             if event_sport is not None:
-                query.append({"$match": {"sport": event_sport}})
+                query.append({"$match": {"sport": ObjectId(event_sport)}})
             if event_date is not None:
                 query.append({"$match": {"event_date":int(event_date)}})
             if court_id is not None:
