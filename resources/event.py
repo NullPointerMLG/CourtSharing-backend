@@ -16,9 +16,11 @@ class Event(Resource):
 
         event_date = args.get('date')
         court_id = args.get('court')  
-
+        event_sport = args.get('sport')
         try:          
             query = []
+            if event_sport is not None:
+                query.append({"$match": {"sport": event_sport}})
             if event_date is not None:
                 query.append({"$match": {"event_date":int(event_date)}})
             if court_id is not None:
