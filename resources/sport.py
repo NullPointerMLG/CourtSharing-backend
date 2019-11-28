@@ -13,10 +13,7 @@ class Sport(Resource):
     def get(self):
     # pylint: disable=E1101      
         args = request.get_json(force=True, silent=True)
-        if(args is None):
-            with open('utils/errorCodes.json', 'r') as errorCodes:
-                return json.load(errorCodes)['AUTH_ERROR']['VALUE_ERROR'], 500
-        token_validation = Auth.auth_token(self, args['token'])
+        token_validation = Auth.auth_token(args)
         if(token_validation != 'True'):
             return token_validation
 
