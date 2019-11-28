@@ -8,7 +8,7 @@ import os
 class Auth:
 
     @staticmethod
-    def auth_token(args):
+    def auth_token(headers):
         if (not len(firebase_admin._apps)):
             firebase_admin.initialize_app()
 
@@ -16,7 +16,8 @@ class Auth:
         error_path = os.path.join(dir_path, "errorCodes.json")
 
         try:
-            token = args['token']
+            print(headers['Authorization'])
+            token = headers['Authorization']
             auth.verify_id_token(token)         
             return 'True'
         except (TypeError, KeyError, ValueError):

@@ -7,8 +7,8 @@ from utils.auth import Auth
 class Court(Resource):
 
     def get(self):
-        args = request.get_json(force=True, silent=True)
-        token_validation = Auth.auth_token(args)
+        headers = request.headers
+        token_validation = Auth.auth_token(headers)
         if(token_validation != 'True'):
             return token_validation
 

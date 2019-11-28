@@ -11,13 +11,16 @@ from utils.auth import Auth
 class Sport(Resource):
 
     def get(self):
-    # pylint: disable=E1101      
+    # pylint: disable=E1101
         args = request.get_json(force=True, silent=True)
-        token_validation = Auth.auth_token(args)
+        headers = request.headers
+        token_validation = Auth.auth_token(headers)
         if(token_validation != 'True'):
             return token_validation
 
-        sport_id = args.get('sport_id')
+        sport_id = None
+        if args is not None:
+            sport_id = args.get('sport_id')
 
         try:
             query = []

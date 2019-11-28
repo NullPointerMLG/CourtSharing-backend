@@ -13,12 +13,15 @@ class Event(Resource):
 
     def get(self):
         args = request.get_json(force=True, silent=True)
-        token_validation = Auth.auth_token(args)
+        headers = request.headers
+        token_validation = Auth.auth_token(headers)
         if(token_validation != 'True'):
             return token_validation
 
-        event_date = args.get('date')
-        court_id = args.get('court')  
+        event_date = court_id = None
+        if args is not None:
+            event_date = args.get('date')
+            court_id = args.get('court') 
 
         try:          
             query = []
@@ -44,6 +47,8 @@ class Event(Resource):
         if(token_validation != 'True'):
             return token_validation
 
+        if args is None:
+            return False, 500
         event_data = args
 
         new_event = Event_model(
