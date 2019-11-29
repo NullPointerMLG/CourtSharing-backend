@@ -23,12 +23,12 @@ class Sport(Resource):
 
         sport_id = None
         if args is not None:
-            sport_id = args.get('sport_id')
+            sport_id = args.get('id')
 
         try:
             query = []
             if sport_id is not None:
-                query.append({"$match": {"id": ObjectId(sport_id)}})
+                query.append({"$match": {"_id": ObjectId(sport_id)}})
         except DoesNotExist:
             return False
         sport = eval(dumps(Sport_model.objects.aggregate (*query)))
