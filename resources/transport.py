@@ -16,7 +16,7 @@ class Transport(Resource):
 
     def get(self):
     # pylint: disable=E1101
-        args = request.get_json(force=True, silent=True)
+        args = request.args
         headers = request.headers
         token_validation = Auth.auth_token(headers)
         if(token_validation != 'True'):
@@ -25,13 +25,13 @@ class Transport(Resource):
         transport_id = None
         cond = None
         if args is not None:
-            transport_id = args.get('transport_id')
+            transport_id = args.get('id')
          #   cond = args.get('cond')
 
         try:
             query = []
             if transport_id is not None:
-                query.append({"$match": {"id": ObjectId(transport_id)}})
+                query.append({"$match": {"_id": ObjectId(transport_id)}})
            # if cond=="true" and transportID is not None:
                # query.append({ "$match" : { "id" : ObjectId(transport_id) } })
         except DoesNotExist:
