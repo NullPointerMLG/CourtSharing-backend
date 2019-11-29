@@ -8,7 +8,10 @@ from models.sport import Sport as Sport_model
 from utils.auth import Auth
 
 
+
+
 class Sport(Resource):
+
 
     def get(self):
     # pylint: disable=E1101
