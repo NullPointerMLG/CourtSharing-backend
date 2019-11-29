@@ -6,6 +6,7 @@ from bson import ObjectId
 import requests
 from utils.auth import Auth
 from models.sport import Sport as Sport_model
+# pylint: disable=E1101
 class Court(Resource):
 
     
@@ -22,13 +23,11 @@ class Court(Resource):
         if sportID is not None:
             query.append({ "$match" : { "_id" : ObjectId(sportID) } })
 
-        data = Sport_model.objects.aggregate(*query) 
+        sports_data = Sport_model.objects.aggregate(*query) 
         
-        jsonAux = eval(dumps(data))
+        sports_json = eval(dumps(sports_data))[0]
 
-        #Esta es una de las formas de hallar el resource_id nos podemos quedar con el 0 pq solo lo vamos a usar cuando busquemos un deporte especific
-        # por lo que solo deberia tener un elemento.
-        resource_url = jsonAux[0]['resource_url']
+        resource_url = sports_json['resource_url']
 
         response = requests.get(resource_url) 
         data = response.json()
