@@ -1,6 +1,6 @@
 import time
 from mongoengine import Document
-from mongoengine import StringField, IntField, ReferenceField
+from mongoengine import StringField, IntField, ReferenceField, ListField
 from models.user import User
 from models.sport import Sport
 
@@ -13,3 +13,4 @@ class Event(Document):
     court_id = StringField(required=True)
     creator = ReferenceField(User, required=True)
     sport = ReferenceField(Sport, required=True)
+    participants = ListField(ReferenceField(User))

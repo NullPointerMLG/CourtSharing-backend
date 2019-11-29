@@ -27,6 +27,8 @@ class Event(Resource):
 
         try:          
             query = []
+            events = []
+            
             if event_sport is not None:
                 query.append({"$match": {"sport": ObjectId(event_sport)}})
             if event_date is not None:
@@ -34,12 +36,24 @@ class Event(Resource):
             if court_id is not None:
                 query.append({"$match": {"court_id":int(court_id)}})
 
-            events = eval(dumps(Event_model.objects.aggregate (*query)))   
-            for event in events:
-                query = User_model.objects.get(id=event['creator']['$oid']) 
-                data = query.to_json()
-                creator = json.loads(data)
-                event['creator'] = creator
+            result = Event_model.objects.aggregate (*query) 
+            for res in result:
+                event = {}
+                event['eventDate'] = res['event_date']
+                event['creationDate'] = res['creation_date']
+                event['title'] = res['title']
+                event['description'] = res['description']
+                event['sport'] = res['sport']
+
+                creator =  User_model.objects.get(id=res['creator'])
+                creatorSerialized = {}
+                creatorSerialized['uuid'] = creator.uuid
+                creatorSerialized['name'] = creator.name
+                creatorSerialized['photoURL'] = creator.photo_url
+                event['creator'] = creatorSerialized     
+
+                events.append(eval(dumps(event)))
+
             return events, 200
         except DoesNotExist:
              with open('utils/errorCodes.json', 'r') as errorCodes:

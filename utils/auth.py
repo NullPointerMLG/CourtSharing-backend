@@ -16,7 +16,6 @@ class Auth:
         error_path = os.path.join(dir_path, "errorCodes.json")
 
         try:
-            print(headers['Authorization'])
             token = headers['Authorization']
             auth.verify_id_token(token)         
             return 'True'
