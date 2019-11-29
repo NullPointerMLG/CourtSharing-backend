@@ -6,25 +6,37 @@ from flask import request
 from bson import ObjectId
 from flask import request
 import datetime
+from mongoengine import DoesNotExist
+from models.transport import Transport as Transport_model
+from utils.auth import Auth
 
 
 
 class Transport(Resource):
 
-    def __init__(self, mongo):
-        self.mongo = mongo
-
-
     def get(self):
+    # pylint: disable=E1101
+        args = request.get_json(force=True, silent=True)
+        headers = request.headers
+        token_validation = Auth.auth_token(headers)
+        if(token_validation != 'True'):
+            return token_validation
 
-        query = []
-        args = request.args
+        transport_id = None
+        cond = None
+        if args is not None:
+            transport_id = args.get('transport_id')
+         #   cond = args.get('cond')
 
-        transportID = args.get('transport-id')
-        cond = args.get('cond')
-        if cond=="true" and transportID is not None:
-            query.append({ "$match" : { "_id" : ObjectId(transportID) } })
+        try:
+            query = []
+            if transport_id is not None:
+                query.append({"$match": {"id": ObjectId(transport_id)}})
+           # if cond=="true" and transportID is not None:
+               # query.append({ "$match" : { "id" : ObjectId(transport_id) } })
+        except DoesNotExist:
+            return False
 
-        data = self.mongo.db.transport.aggregate(query) 
+        transport = eval(dumps(Transport_model.objects.aggregate (*query)))
 
-        return eval(dumps(data)), 200
+        return transport, 200    
