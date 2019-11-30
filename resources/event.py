@@ -28,7 +28,7 @@ class Event(Resource):
         try:          
             query = []
             events = []
-            
+
             if event_sport is not None:
                 query.append({"$match": {"sport": ObjectId(event_sport)}})
             if event_date is not None:
@@ -44,13 +44,25 @@ class Event(Resource):
                 event['title'] = res['title']
                 event['description'] = res['description']
                 event['sport'] = res['sport']
+                event['courtID'] = res['court_id']
 
                 creator =  User_model.objects.get(id=res['creator'])
-                creatorSerialized = {}
-                creatorSerialized['uuid'] = creator.uuid
-                creatorSerialized['name'] = creator.name
-                creatorSerialized['photoURL'] = creator.photo_url
-                event['creator'] = creatorSerialized     
+                creator_serialized = {}
+                creator_serialized['uuid'] = creator.uuid
+                creator_serialized['name'] = creator.name
+                creator_serialized['photoURL'] = creator.photo_url
+                event['creator'] = creator_serialized   
+
+                participants_from_db = res['participants']
+                participants = []
+                for p in participants_from_db:
+                    user =  User_model.objects.get(id=p)
+                    user_serialized = {}
+                    user_serialized['uuid'] = user.uuid
+                    user_serialized['name'] = user.name
+                    user_serialized['photoURL'] = user.photo_url
+                    participants.append(user_serialized)
+                event['participants'] = participants
 
                 events.append(eval(dumps(event)))
 
