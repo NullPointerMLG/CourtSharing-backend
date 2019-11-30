@@ -7,6 +7,7 @@ from bson import ObjectId
 from models.event import Event as Event_model
 from models.user import User as User_model
 from models.sport import Sport as Sport_model
+from models.comment import Comment as Comment_model
 from utils.auth import Auth
 
 # pylint: disable=E1101
@@ -24,53 +25,63 @@ class Events(Resource):
             event_date = args.get('date')
             court_id = args.get('court') 
             event_sport = args.get('sport')
+        
+        query = []
+        events = []
+        if event_sport is not None:
+            query.append({"$match": {"sport": ObjectId(event_sport)}})
+        if event_date is not None:
+            query.append({"$match": {"event_date":int(event_date)}})
+        if court_id is not None:
+            query.append({"$match": {"court_id":int(court_id)}})
+        result = Event_model.objects.aggregate (*query) 
 
-        try:          
-            query = []
-            events = []
+        for res in result:
+            event = {}
+            event['id'] = eval(dumps(res['_id']))['$oid']
+            event['eventDate'] = res['event_date']
+            event['creationDate'] = res['creation_date']
+            event['title'] = res['title']
+            event['description'] = res['description']
+            event['sport'] = res['sport']
+            event['courtID'] = res['court_id']
 
-            if event_sport is not None:
-                query.append({"$match": {"sport": ObjectId(event_sport)}})
-            if event_date is not None:
-                query.append({"$match": {"event_date":int(event_date)}})
-            if court_id is not None:
-                query.append({"$match": {"court_id":int(court_id)}})
+            creator =  User_model.objects.get(id=res['creator'])
+            creator_serialized = {}
+            creator_serialized['uuid'] = creator.uuid
+            creator_serialized['name'] = creator.name
+            creator_serialized['photoURL'] = creator.photo_url
+            event['creator'] = creator_serialized   
 
-            result = Event_model.objects.aggregate (*query) 
-            for res in result:
-                event = {}
-                event['id'] = eval(dumps(res['_id']))['$oid']
-                event['eventDate'] = res['event_date']
-                event['creationDate'] = res['creation_date']
-                event['title'] = res['title']
-                event['description'] = res['description']
-                event['sport'] = res['sport']
-                event['courtID'] = res['court_id']
+            participants_from_db = res['participants']
+            participants = []
+            for p in participants_from_db:
+                user =  User_model.objects.get(id=p)
+                user_serialized = {}
+                user_serialized['uuid'] = user.uuid
+                user_serialized['name'] = user.name
+                user_serialized['photoURL'] = user.photo_url
+                participants.append(user_serialized)
+            event['participants'] = participants
+            
+            
+            comments_from_db = Comment_model.objects(event=event['id'])
+            comments = []
+            for c in comments_from_db:
+                comment = {}
+                user_serialized = {}
+                user_serialized['uuid'] = c.user.uuid
+                user_serialized['name'] = c.user.name
+                user_serialized['photoURL'] = c.user.photo_url
+                comment['user'] = user_serialized
+                comment['message'] = c.message
+                comments.append(comment)
+            event['comments'] = comments
 
-                creator =  User_model.objects.get(id=res['creator'])
-                creator_serialized = {}
-                creator_serialized['uuid'] = creator.uuid
-                creator_serialized['name'] = creator.name
-                creator_serialized['photoURL'] = creator.photo_url
-                event['creator'] = creator_serialized   
+            events.append(eval(dumps(event)))
+        return events, 200
 
-                participants_from_db = res['participants']
-                participants = []
-                for p in participants_from_db:
-                    user =  User_model.objects.get(id=p)
-                    user_serialized = {}
-                    user_serialized['uuid'] = user.uuid
-                    user_serialized['name'] = user.name
-                    user_serialized['photoURL'] = user.photo_url
-                    participants.append(user_serialized)
-                event['participants'] = participants
 
-                events.append(eval(dumps(event)))
-
-            return events, 200
-        except DoesNotExist:
-             with open('utils/errorCodes.json', 'r') as errorCodes:
-                return json.load(errorCodes)['EVENT_ERROR']['NOT_FOUND'], 500
     
     def post(self):
         # TODO: validate parameters
