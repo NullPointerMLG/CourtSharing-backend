@@ -5,6 +5,7 @@ import firebase_admin
 from firebase_admin import auth
 from mongoengine import DoesNotExist
 from models.user import User as User_model
+from bson.json_util import dumps
 
 class Login(Resource):
     def __init__(self):
@@ -29,7 +30,7 @@ class Login(Resource):
                     photo_url=current_user.photo_url
                 )
                 user.save()
-            return True          
+            return eval(dumps(user.id)), 200          
             
         except ValueError:
             with open('utils/errorCodes.json', 'r') as errorCodes:

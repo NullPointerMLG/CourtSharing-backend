@@ -10,7 +10,7 @@ class Event(Document):
     event_date = IntField(required=True)
     title = StringField(max_length=150, required=True)
     description = StringField(max_length=1500)
-    court_id = StringField(required=True)
+    court_id = IntField()
     creator = ReferenceField(User, required=True)
     sport = ReferenceField(Sport, required=True)
     participants = ListField(ReferenceField(User))
