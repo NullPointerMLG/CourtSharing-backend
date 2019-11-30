@@ -4,7 +4,6 @@ from mongoengine import StringField, IntField, ReferenceField, ListField
 from models.user import User
 from models.sport import Sport
 
-
 class Event(Document):
     creation_date = IntField(default=time.time(), required=True)
     event_date = IntField(required=True)
