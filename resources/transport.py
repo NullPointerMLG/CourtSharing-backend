@@ -35,14 +35,15 @@ class Transport(Resource):
             if cond=="true" and transport_id is not None:
                 query.append({ "$match" : { "_id" : ObjectId(transport_id) } })
 
-                    transports_data = Transport_model.objects.aggregate(*query) 
+                transports_data = Transport_model.objects.aggregate(*query) 
         
-                    transports_json = eval(dumps(transports_data))[0]
+                transports_json = eval(dumps(transports_data))[0]
 
-                    resource_url = transports_json['resource_url']
+                resource_url = transports_json['resource_url']
 
-                    response = requests.get(resource_url) 
-                    data = response.json()
+                response = requests.get(resource_url) 
+                transport = response.json()
+        
         except DoesNotExist:
             return False
 
