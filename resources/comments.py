@@ -11,15 +11,19 @@ from models.comment import Comment as Comment_model
 from utils.auth import Auth
 
 # pylint: disable=E1101
-class Comment(Resource):
+class Comments(Resource):
     
-    def delete(self, id):
+    def post(self):
         # pylint: disable=E1101
+        args = request.get_json(force=True, silent=True)['params']
         headers = request.headers
         token_validation = Auth.auth_token(headers)
         if(token_validation != 'True'):
             return token_validation
-        
-        Comment_model.objects.get(id=ObjectId(id)).delete()
 
-        return True, 200
+        user = User_model.objects.get(uuid=args['userUUID'])
+
+        comment = Comment_model(user=user.id, event=args['eventID'], message=args['message'])
+        comment.save()
+
+        return eval(dumps(comment)), 200

@@ -75,6 +75,7 @@ class Events(Resource):
                 user_serialized['photoURL'] = c.user.photo_url
                 comment['user'] = user_serialized
                 comment['message'] = c.message
+                comment['id'] = eval(dumps(c.id))['$oid']
                 comments.append(comment)
             event['comments'] = comments
 
