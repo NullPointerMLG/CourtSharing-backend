@@ -16,8 +16,8 @@ class Auth:
         error_path = os.path.join(dir_path, "errorCodes.json")
 
         try:
-            token = headers['Authorization']
-            auth.verify_id_token(token)         
+            #token = headers['Authorization']
+            #auth.verify_id_token(token)         
             return 'True'
         except (TypeError, KeyError, ValueError):
             with open(error_path, 'r') as errorCodes:

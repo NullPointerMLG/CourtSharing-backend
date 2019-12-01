@@ -91,6 +91,7 @@ class Events(Resource):
         if(token_validation != 'True'):
             return token_validation
 
+        print(args)
         if args is None:
             return False, 500
         event_data = args
@@ -100,8 +101,9 @@ class Events(Resource):
             title=event_data['title'],
             description=event_data['description'],
             court_id=event_data['court_id'],
-            creator=User_model.objects(id=event_data['creator_id']),
-            sport=Sport_model.objects(id=event_data['sport_id'])
+            creator=event_data['creator_id'],
+            sport=event_data['sport_id'],
+            participants=[event_data['creator_id']]
         )
         new_event.save()
         event = new_event.to_json()
