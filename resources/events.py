@@ -14,7 +14,7 @@ from utils.auth import Auth
 class Events(Resource):
 
     def get(self):
-        args = request.get_json(force=True, silent=True)
+        args = request.args
         headers = request.headers
         token_validation = Auth.auth_token(headers)
         if(token_validation != 'True'):
