@@ -20,6 +20,10 @@ class Comment(Resource):
         if(token_validation != 'True'):
             return token_validation
         
-        Comment_model.objects.get(id=ObjectId(id)).delete()
+        try:
+            Comment_model.objects.get(id=ObjectId(id)).delete()
+        except DoesNotExist:
+            with open('utils/errorCodes.json', 'r') as errorCodes:
+                return json.load(errorCodes)['COMMENT_ERROR']['NOT_FOUND'], 500
 
         return True, 200

@@ -2,7 +2,7 @@ import json
 from flask_restful import Resource
 from bson.json_util import dumps
 from flask import request
-from mongoengine import DoesNotExist
+from mongoengine import DoesNotExist, ValidationError
 from bson import ObjectId
 from models.event import Event as Event_model
 from models.user import User as User_model
@@ -21,9 +21,17 @@ class Comments(Resource):
         if(token_validation != 'True'):
             return token_validation
 
-        user = User_model.objects.get(uuid=args['userUUID'])
+        try:
+            user = User_model.objects.get(uuid=args['userUUID'])
+        except DoesNotExist:
+            with open('utils/errorCodes.json', 'r') as errorCodes:
+                return json.load(errorCodes)['USER_ERROR']['NOT_FOUND'], 500
 
-        comment = Comment_model(user=user.id, event=args['eventID'], message=args['message'])
-        comment.save()
+        try:
+            comment = Comment_model(user=user.id, event=args['eventID'], message=args['message'])
+            comment.save()
+        except ValidationError:
+             with open('utils/errorCodes.json', 'r') as errorCodes:
+                return json.load(errorCodes)['COMMENT_ERROR']['NOT_VALID'], 500
 
         return eval(dumps(comment)), 200

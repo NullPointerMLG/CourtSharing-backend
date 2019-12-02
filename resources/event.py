@@ -2,7 +2,7 @@ import json
 from flask_restful import Resource
 from bson.json_util import dumps
 from flask import request
-from mongoengine import DoesNotExist
+from mongoengine import DoesNotExist, ValidationError
 from bson import ObjectId
 from models.event import Event as Event_model
 from models.user import User as User_model
@@ -25,21 +25,30 @@ class Event(Resource):
         
         try:
             participant= User_model.objects.get(uuid=args['participantUUID'])
-            event = Event_model.objects.get(id=id)
-            found = False
-            for p in event['participants']:
-                if p.id == participant.id:
-                    found = True
-                    event.update(pull__participants=participant.id)
-                    break
-            if not found:
-                event.participants.append(ObjectId(participant.id))
-            
-            event.save()       
-            return eval(dumps(event)), 200
         except DoesNotExist:
-             with open('utils/errorCodes.json', 'r') as errorCodes:
+            with open('utils/errorCodes.json', 'r') as errorCodes:
+                return json.load(errorCodes)['USER_ERROR']['NOT_FOUND'], 500
+
+        try:        
+            event = Event_model.objects.get(id=id)
+        except DoesNotExist:
+            with open('utils/errorCodes.json', 'r') as errorCodes:
                 return json.load(errorCodes)['EVENT_ERROR']['NOT_FOUND'], 500
 
+        found = False
+        for p in event['participants']:
+            if p.id == participant.id:
+                found = True
+                event.update(pull__participants=participant.id)
+                break   
+        if not found:
+            event.participants.append(ObjectId(participant.id))  
+            try:       
+                event.save()
+            except ValidationError:
+                with open('utils/errorCodes.json', 'r') as errorCodes:
+                    return json.load(errorCodes)['EVENT_ERROR']['NOT_VALID'], 500
+            return eval(dumps(event)), 200
+            
         return 200
         
