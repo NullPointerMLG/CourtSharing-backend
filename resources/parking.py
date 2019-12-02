@@ -44,6 +44,15 @@ class Parking(Resource):
             fdata = []
             for feature in data:
                 record = feature['properties']
+                record.pop('timestamp', None)
+                record.pop('begin', None)
+                record.pop('end', None)
+                record.pop('altitudemode', None)
+                record.pop('tessellate', None)
+                record.pop('extrude', None)
+                record.pop('visibility', None)
+                record.pop('draworder', None)
+                record.pop('icon', None)
                 flat = float(feature['geometry']['coordinates'][0])
                 flon = float(feature['geometry']['coordinates'][1])
                 distance = Distance.calc_distance(lat, lon, flat, flon)
@@ -54,5 +63,13 @@ class Parking(Resource):
         else:
             for feature in data:
                 record = feature['properties']
-
+                record.pop('timestamp', None)
+                record.pop('begin', None)
+                record.pop('end', None)
+                record.pop('altitudemode', None)
+                record.pop('tessellate', None)
+                record.pop('extrude', None)
+                record.pop('visibility', None)
+                record.pop('draworder', None)
+                record.pop('icon', None)
         return data, 200  
