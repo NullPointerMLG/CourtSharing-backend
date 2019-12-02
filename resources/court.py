@@ -19,24 +19,43 @@ class Court(Resource):
         query = []
         args = request.args
 
-        sportID = args.get('id')
+        sportID = args.get('sport-id')
+        court_id = args.get('id')
+        lat = args.get('lat')
+        lon = args.get('lon')
         if sportID is not None:
             query.append({ "$match" : { "_id" : ObjectId(sportID) } })
 
         sports_data = Sport_model.objects.aggregate(*query) 
         
         sports_json = eval(dumps(sports_data))[0]
-
+            
         resource_url = sports_json['resource_url']
 
         response = requests.get(resource_url) 
         data = response.json()
         data = data['features']
-        for feature in data:
-            record = feature['properties']
-            record['INFOESP'] = record['INFOESP'][0]
-            record.pop('PRECIOS', None)
-            record.pop('HORARIOS', None)
-            record.pop('DESCRIPCION', None)
-            record.pop('CONTACTO', None)
+        if lat is None or lon is None:
+            for feature in data:
+                record = feature['properties']
+                record['INFOESP'] = record['INFOESP'][0]
+                record.pop('PRECIOS', None)
+                record.pop('HORARIOS', None)
+                record.pop('DESCRIPCION', None)
+                record.pop('CONTACTO', None)
+                if court_id is not None:
+                    if int(court_id) == record['ID']:
+                        return feature, 200  
+        else:
+            for feature in data:
+                record = feature['properties']
+                record['INFOESP'] = record['INFOESP'][0]
+                record.pop('PRECIOS', None)
+                record.pop('HORARIOS', None)
+                record.pop('DESCRIPCION', None)
+                record.pop('CONTACTO', None)
+                if court_id is not None:
+                    if int(court_id) == record['ID']:
+                        return feature, 200  
+    
         return data, 200
