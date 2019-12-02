@@ -7,6 +7,7 @@ from resources.court import Court
 from resources.sport import Sport
 from resources.login import Login
 from resources.transport import Transport
+from resources.parking import Parking
 from config import MONGO_URL
 
 
@@ -23,6 +24,7 @@ API.add_resource(Login, '/login')
 API.add_resource(Court, '/courts')
 API.add_resource(Sport, '/sports')
 API.add_resource(Transport, '/transports')
+API.add_resource(Parking, '/parkings')
 
 if __name__ == '__main__':
     print("Deploying service in port 5000")

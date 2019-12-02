@@ -26,23 +26,11 @@ class Transport(Resource):
         cond = None
         if args is not None:
             transport_id = args.get('id')
-            cond = args.get('cond')
 
         try:
             query = []
             if transport_id is not None:
                 query.append({"$match": {"_id": ObjectId(transport_id)}})
-            if cond=="true" and transport_id is not None:
-                query.append({ "$match" : { "_id" : ObjectId(transport_id) } })
-
-                transports_data = Transport_model.objects.aggregate(*query) 
-        
-                transports_json = eval(dumps(transports_data))[0]
-
-                resource_url = transports_json['resource_url']
-
-                response = requests.get(resource_url) 
-                transport = response.json()
         
         except DoesNotExist:
             return False
