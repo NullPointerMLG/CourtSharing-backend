@@ -14,13 +14,33 @@
         }
     },
     "EVENT_ERROR": {
-        "EMPTY_EVENT_DATA": {
-            "errorCode": "EVENT_2001",
-            "message": "Event data can't be empty"
+        "NOT_VALID": {
+            "errorCode": "COMMENT_2001",
+            "message": "Event data is empty or invalid"
         },
         "NOT_FOUND": {
             "errorCode": "EVENT_2404",
             "message": "Event was not found"
+        }
+    },
+    "COMMENT_ERROR": {
+        "NOT_VALID": {
+            "errorCode": "COMMENT_2001",
+            "message": "Comment data is empty or invalid"
+        },
+        "NOT_FOUND": {
+            "errorCode": "COMMENT_2404",
+            "message": "Comment was not found"
+        }
+    },
+    "USER_ERROR": {
+        "NOT_VALID": {
+            "errorCode": "USER_2001",
+            "message": "User data is empty or invalid"
+        },
+        "NOT_FOUND": {
+            "errorCode": "USER_2404",
+            "message": "User was not found"
         }
     }
 }
