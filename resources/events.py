@@ -87,7 +87,7 @@ class Events(Resource):
     def post(self):
         # TODO: validate parameters
         args = request.get_json(force=True, silent=True)
-        token_validation = Auth.auth_token(args)
+        token_validation = Auth.auth_token(request.headers)
         if(token_validation != 'True'):
             return token_validation
 
@@ -95,13 +95,16 @@ class Events(Resource):
             return False, 500
         event_data = args
 
+        user = User_model.objects.get(uuid=args['creator_uuid'])
+
         new_event = Event_model(
-            event_date=event_data['event_date'],
+            event_date=int(event_data['event_date']),
             title=event_data['title'],
             description=event_data['description'],
             court_id=event_data['court_id'],
-            creator=User_model.objects(id=event_data['creator_id']),
-            sport=Sport_model.objects(id=event_data['sport_id'])
+            creator=user['id'],
+            sport=event_data['sport_id']['$oid'],
+            participants=[user['id']]
         )
         new_event.save()
         event = new_event.to_json()
