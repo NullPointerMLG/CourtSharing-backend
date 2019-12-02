@@ -8,6 +8,7 @@ import requests
 import datetime
 from mongoengine import DoesNotExist
 from models.transport import Transport as Transport_model
+from utils.distance import Distance
 from utils.auth import Auth
 
 
@@ -25,6 +26,8 @@ class Parking(Resource):
         args = request.args
 
         transport_id = args.get('id')
+        lat = args.get('lat')
+        lon = args.get('lon')
         if transport_id is not None:
             query.append({ "$match" : { "_id" : ObjectId(transport_id) } })
 
@@ -37,7 +40,19 @@ class Parking(Resource):
         response = requests.get(resource_url) 
         data = response.json()
         data = data['features']
-        for feature in data:
-            record = feature['properties']
+        if lat is not None and lon is not None:
+            fdata = []
+            for feature in data:
+                record = feature['properties']
+                flat = float(feature['geometry']['coordinates'][0])
+                flon = float(feature['geometry']['coordinates'][1])
+                distance = Distance.calc_distance(lat, lon, flat, flon)
+                if distance >= 0 and distance <= 5:
+                    print(distance)
+                    fdata.append(feature)
+            return fdata, 200
+        else:
+            for feature in data:
+                record = feature['properties']
 
         return data, 200  
