@@ -12,4 +12,5 @@ class Event(Document):
     court_id = IntField()
     creator = ReferenceField(User, required=True)
     sport = ReferenceField(Sport, required=True)
+    photo = StringField(max_length=150, required=False)
     participants = ListField(ReferenceField(User))

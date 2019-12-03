@@ -32,7 +32,6 @@ class Events(Resource):
             query.append({"$match": {"sport": ObjectId(event_sport)}})
         if event_date is not None:
             query.append({"$match":  {"event_date": {"$gte" :int(event_date)}}})
-            # {"$ev": ["event_date",int(event_date)]}})
         if court_id is not None:
             query.append({"$match": {"court_id":int(court_id)}})
         result = Event_model.objects.aggregate (*query) 
@@ -105,7 +104,8 @@ class Events(Resource):
             court_id=event_data['court_id'],
             creator=user['id'],
             sport=event_data['sport_id']['$oid'],
-            participants=[user['id']]
+            participants=[user['id']],
+            photo=event_data['photo']
         )
         new_event.save()
         event = new_event.to_json()
