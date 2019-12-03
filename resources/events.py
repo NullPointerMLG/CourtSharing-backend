@@ -2,7 +2,7 @@ import json
 from flask_restful import Resource
 from bson.json_util import dumps
 from flask import request
-from mongoengine import DoesNotExist
+from mongoengine import DoesNotExist, ValidationError
 from bson import ObjectId
 from models.event import Event as Event_model
 from models.user import User as User_model
@@ -46,7 +46,12 @@ class Events(Resource):
             event['sport'] = res['sport']
             event['courtID'] = res['court_id']
 
-            creator =  User_model.objects.get(id=res['creator'])
+            try:
+                creator =  User_model.objects.get(id=res['creator'])
+            except DoesNotExist:
+                with open('utils/errorCodes.json', 'r') as errorCodes:
+                    return json.load(errorCodes)['USER_ERROR']['NOT_FOUND'], 500
+                
             creator_serialized = {}
             creator_serialized['uuid'] = creator.uuid
             creator_serialized['name'] = creator.name
@@ -63,8 +68,7 @@ class Events(Resource):
                 user_serialized['photoURL'] = user.photo_url
                 participants.append(user_serialized)
             event['participants'] = participants
-            
-            
+                        
             comments_from_db = Comment_model.objects(event=event['id'])
             comments = []
             for c in comments_from_db:
@@ -94,9 +98,13 @@ class Events(Resource):
         if args is None:
             return False, 500
         event_data = args
-
-        user = User_model.objects.get(uuid=args['creator_uuid'])
-
+        
+        try:
+            user = User_model.objects.get(uuid=args['creator_uuid'])
+        except DoesNotExist:
+            with open('utils/errorCodes.json', 'r') as errorCodes:
+                    return json.load(errorCodes)['USER_ERROR']['NOT_FOUND'], 500
+        
         new_event = Event_model(
             event_date=int(event_data['event_date']),
             title=event_data['title'],
@@ -107,6 +115,12 @@ class Events(Resource):
             participants=[user['id']],
             photo=event_data['photo']
         )
-        new_event.save()
+
+        try:
+            new_event.save()
+        except ValidationError:
+            with open('utils/errorCodes.json', 'r') as errorCodes:
+                    return json.load(errorCodes)['EVENT_ERROR']['NOT_VALID'], 500
+
         event = new_event.to_json()
         return eval(dumps(event)), 200
