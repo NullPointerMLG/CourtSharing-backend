@@ -113,8 +113,7 @@ class Events(Resource):
             court_id=event_data['court_id'],
             creator=user['id'],
             sport=event_data['sport_id']['$oid'],
-            participants=[user['id']],
-            photo=event_data['photo']
+            participants=[user['id']]
         )
 
         try:
