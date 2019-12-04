@@ -16,9 +16,9 @@ class Events(Resource):
     def get(self):
         args = request.args
         headers = request.headers
-        token_validation = Auth.auth_token(headers)
-        if(token_validation != 'True'):
-            return token_validation
+        #token_validation = Auth.auth_token(headers)
+       # if(token_validation != 'True'):
+          #  return token_validation
 
         event_date = court_id = event_sport = None
         if args is not None:
@@ -45,6 +45,7 @@ class Events(Resource):
             event['description'] = res['description']
             event['sport'] = res['sport']
             event['courtID'] = res['court_id']
+            event['photos'] = res['photos']
 
             try:
                 creator =  User_model.objects.get(id=res['creator'])
