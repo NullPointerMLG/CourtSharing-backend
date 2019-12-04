@@ -13,7 +13,6 @@ class Distance:
         elat = radians(float(lat2))
         elon = radians(float(lon2))
 
-        
         dphi = elat - slat
         dlambda = elon - slon
 
@@ -22,3 +21,4 @@ class Distance:
         dist = (2*R*atan2(sqrt(a), sqrt(1 - a)))/1000
 
         return dist
+      

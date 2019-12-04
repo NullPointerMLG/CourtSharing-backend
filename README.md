@@ -34,9 +34,17 @@ set GOOGLE_APPLICATION_CREDENTIALS="C:/PATH/serviceAccountKey.json"
 #On windows powershell
 $env:GOOGLE_APPLICATION_CREDENTIALS="C:/PATH/serviceAccountKey.json"
 ```
-6. Run Flask
+6.Option1: Run Flask
 ```
 python app.py
+```
+6.Option2: Run Flask with script
+```
+#On linux
+./run.sh
+
+#On windows
+./run.ps1
 ```
 
 Prerrequisites:
