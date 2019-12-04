@@ -4,6 +4,7 @@ from flask_cors import CORS
 import mongoengine
 from resources.event import Event
 from resources.court import Court
+from resources.courts import Courts
 from resources.sport import Sport
 from resources.login import Login
 from config import MONGO_URL
@@ -19,7 +20,8 @@ API = Api(APP)
 # Endpoints
 API.add_resource(Event, '/events')
 API.add_resource(Login, '/login')
-API.add_resource(Court, '/courts')
+API.add_resource(Courts, '/courts')
+API.add_resource(Court, '/court')
 API.add_resource(Sport, '/sports')
 
 if __name__ == '__main__':

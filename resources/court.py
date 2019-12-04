@@ -11,7 +11,7 @@ from models.sport import Sport as Sport_model
 class Court(Resource):
 
     
-    def get(self):
+    def get(self, id):
         headers = request.headers
         token_validation = Auth.auth_token(headers)
         if(token_validation != 'True'):
@@ -21,7 +21,6 @@ class Court(Resource):
         args = request.args
 
         sportID = args.get('sport-id')
-        court_id = args.get('id')
         lat = args.get('lat')
         lon = args.get('lon')
         if sportID is not None:
@@ -36,31 +35,15 @@ class Court(Resource):
         response = requests.get(resource_url) 
         data = response.json()
         data = data['features']
-        if lat is not None and lon is not None:
-            fdata = []
-            for feature in data:
-                record = feature['properties']
-                record['INFOESP'] = record['INFOESP'][0]
-                record.pop('PRECIOS', None)
-                record.pop('HORARIOS', None)
-                record.pop('DESCRIPCION', None)
-                record.pop('CONTACTO', None)
-                flat = float(feature['geometry']['coordinates'][0])
-                flon = float(feature['geometry']['coordinates'][1])
-                distance = Distance.calc_distance(lat, lon, flat, flon)
-                if distance >= 0 and distance <= 5:
-                    fdata.append(feature)
-            return fdata, 200
-        else:
-            for feature in data:
-                record = feature['properties']
-                record['INFOESP'] = record['INFOESP'][0]
-                record.pop('PRECIOS', None)
-                record.pop('HORARIOS', None)
-                record.pop('DESCRIPCION', None)
-                record.pop('CONTACTO', None)
-                if court_id is not None:
-                    if int(court_id) == record['ID']:
-                        return feature, 200  
+        for feature in data:
+            record = feature['properties']
+            record['INFOESP'] = record['INFOESP'][0]
+            record.pop('PRECIOS', None)
+            record.pop('HORARIOS', None)
+            record.pop('DESCRIPCION', None)
+            record.pop('CONTACTO', None)
+            if id is not None:
+                if int(id) == record['ID']:
+                    return feature, 200  
     
         return data, 200
