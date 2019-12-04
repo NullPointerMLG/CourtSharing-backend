@@ -5,12 +5,13 @@ from flask import request
 from bson import ObjectId
 import requests
 from utils.auth import Auth
+from utils.distance import Distance
 from models.sport import Sport as Sport_model
 # pylint: disable=E1101
 class Court(Resource):
 
     
-    def get(self):
+    def get(self, id):
         headers = request.headers
         token_validation = Auth.auth_token(headers)
         if(token_validation != 'True'):
@@ -19,14 +20,16 @@ class Court(Resource):
         query = []
         args = request.args
 
-        sportID = args.get('id')
+        sportID = args.get('sport-id')
+        lat = args.get('lat')
+        lon = args.get('lon')
         if sportID is not None:
             query.append({ "$match" : { "_id" : ObjectId(sportID) } })
 
         sports_data = Sport_model.objects.aggregate(*query) 
         
         sports_json = eval(dumps(sports_data))[0]
-
+            
         resource_url = sports_json['resource_url']
 
         response = requests.get(resource_url) 
@@ -39,4 +42,8 @@ class Court(Resource):
             record.pop('HORARIOS', None)
             record.pop('DESCRIPCION', None)
             record.pop('CONTACTO', None)
+            if id is not None:
+                if int(id) == record['ID']:
+                    return feature, 200  
+    
         return data, 200

@@ -5,6 +5,7 @@ import mongoengine
 from resources.events import Events
 from resources.event import Event
 from resources.court import Court
+from resources.courts import Courts
 from resources.sport import Sport
 from resources.login import Login
 from resources.transport import Transport
@@ -25,7 +26,8 @@ API = Api(APP)
 API.add_resource(Events, '/events')
 API.add_resource(Event, '/events/<string:id>')
 API.add_resource(Login, '/login')
-API.add_resource(Court, '/courts')
+API.add_resource(Courts, '/courts')
+API.add_resource(Court, '/court/<int:id>')
 API.add_resource(Sport, '/sports')
 API.add_resource(Transport, '/transports')
 API.add_resource(Parking, '/parkings')
