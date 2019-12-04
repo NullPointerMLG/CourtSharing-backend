@@ -21,7 +21,7 @@ API = Api(APP)
 API.add_resource(Event, '/events')
 API.add_resource(Login, '/login')
 API.add_resource(Courts, '/courts')
-API.add_resource(Court, '/court')
+API.add_resource(Court, '/court/<int:id>')
 API.add_resource(Sport, '/sports')
 
 if __name__ == '__main__':
