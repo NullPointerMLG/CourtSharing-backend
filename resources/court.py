@@ -44,6 +44,6 @@ class Court(Resource):
             record.pop('CONTACTO', None)
             if id is not None:
                 if int(id) == record['ID']:
-                    return feature, 200  
+                    return [feature], 200  
     
         return data, 200
