@@ -46,6 +46,7 @@ class Events(Resource):
             event['sport'] = res['sport']
             event['courtID'] = res['court_id']
 
+            # Creator
             try:
                 creator =  User_model.objects.get(id=res['creator'])
             except DoesNotExist:
@@ -58,6 +59,7 @@ class Events(Resource):
             creator_serialized['photoURL'] = creator.photo_url
             event['creator'] = creator_serialized   
 
+            # Participants
             participants_from_db = res['participants']
             participants = []
             for p in participants_from_db:
@@ -68,7 +70,8 @@ class Events(Resource):
                 user_serialized['photoURL'] = user.photo_url
                 participants.append(user_serialized)
             event['participants'] = participants
-                        
+
+            # Comments            
             comments_from_db = Comment_model.objects(event=event['id'])
             comments = []
             for c in comments_from_db:
@@ -82,6 +85,16 @@ class Events(Resource):
                 comment['id'] = eval(dumps(c.id))['$oid']
                 comments.append(comment)
             event['comments'] = comments
+
+            # Sport
+            try:
+                query = []
+                if res['sport'] is not None:
+                    query.append({"$match": {"_id": ObjectId(res['sport'])}})
+            except DoesNotExist:
+                return False
+            sport = eval(dumps(Sport_model.objects.aggregate (*query)))
+            event['sport'] = sport[0]
 
             events.append(eval(dumps(event)))
         return events, 200
