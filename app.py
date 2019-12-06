@@ -12,6 +12,7 @@ from resources.transport import Transport
 from resources.parking import Parking
 from resources.comments import Comments
 from resources.comment import Comment
+from resources.image import Image
 from config import MONGO_URL
 
 
@@ -33,6 +34,7 @@ API.add_resource(Transport, '/transports')
 API.add_resource(Parking, '/parkings')
 API.add_resource(Comments, '/comments')
 API.add_resource(Comment, '/comments/<string:id>')
+API.add_resource(Image, '/image')
 
 if __name__ == '__main__':
     print("Deploying service in port 5000")
