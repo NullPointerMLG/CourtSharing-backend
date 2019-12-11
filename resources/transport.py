@@ -23,7 +23,6 @@ class Transport(Resource):
             return token_validation
 
         transport_id = None
-        cond = None
         if args is not None:
             transport_id = args.get('id')
 

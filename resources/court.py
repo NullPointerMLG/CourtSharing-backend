@@ -5,7 +5,6 @@ from flask import request
 from bson import ObjectId
 import requests
 from utils.auth import Auth
-from utils.distance import Distance
 from models.sport import Sport as Sport_model
 # pylint: disable=E1101
 class Court(Resource):
@@ -21,8 +20,6 @@ class Court(Resource):
         args = request.args
 
         sportID = args.get('sport-id')
-        lat = args.get('lat')
-        lon = args.get('lon')
         if sportID is not None:
             query.append({ "$match" : { "_id" : ObjectId(sportID) } })
 
