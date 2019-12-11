@@ -29,21 +29,22 @@ class Event(Resource):
             with open('utils/errorCodes.json', 'r') as errorCodes:
                 return json.load(errorCodes)['EVENT_ERROR']['NOT_FOUND'], 500
 
-        try:
-            if args['eventDate'] is not None: 
-                event.event_date = args['eventDate'] 
-            if args['title'] is not None: 
-                event.title = args['title'] 
-            if args['description'] is not None:
-                event.description = args['description']
-            try:    
-                event.save()
-            except ValidationError:
+        if args['participantUUID'] is None:
+            try:
+                if args['eventDate'] is not None: 
+                    event.event_date = args['eventDate'] 
+                if args['title'] is not None: 
+                    event.title = args['title'] 
+                if args['description'] is not None:
+                    event.description = args['description']
+                try:    
+                    event.save()
+                except ValidationError:
+                    with open('utils/errorCodes.json', 'r') as errorCodes:
+                        return json.load(errorCodes)['EVENT_ERROR']['NOT_VALID'], 500
+            except DoesNotExist:
                 with open('utils/errorCodes.json', 'r') as errorCodes:
-                    return json.load(errorCodes)['EVENT_ERROR']['NOT_VALID'], 500
-        except DoesNotExist:
-            with open('utils/errorCodes.json', 'r') as errorCodes:
-                return json.load(errorCodes)['EVENT_ERROR']['NOT_FOUND'], 500
+                    return json.load(errorCodes)['EVENT_ERROR']['NOT_FOUND'], 500
         
         
         if args['participantUUID'] is not None:
