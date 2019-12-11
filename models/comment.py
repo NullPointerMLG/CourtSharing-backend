@@ -6,3 +6,5 @@ class Comment(Document):
     user = ReferenceField(User, required=True)
     message = StringField(max_length=1500, required=True)
     event = ReferenceField(Event, reverse_delete_rule=CASCADE, required=True)
+
+    
