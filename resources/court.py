@@ -1,11 +1,11 @@
-from flask_restful import Resource, reqparse
-from bson.json_util import dumps, loads
-import json
-from flask import request
+from flask_restful import Resource
 from bson import ObjectId
+from bson.json_util import dumps
+from flask import request
 import requests
 from utils.auth import Auth
 from models.sport import Sport as Sport_model
+
 # pylint: disable=E1101
 class Court(Resource):
 

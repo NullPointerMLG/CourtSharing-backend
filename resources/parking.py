@@ -1,11 +1,6 @@
-from flask_restful import Resource, reqparse
-from bson.json_util import dumps
-import json
+from flask_restful import Resource
 from flask import request
-from bson import ObjectId
 import requests
-import datetime
-from mongoengine import DoesNotExist
 from models.transport import Transport as Transport_model
 from utils.distance import Distance
 from utils.auth import Auth

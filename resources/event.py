@@ -6,10 +6,7 @@ from mongoengine import DoesNotExist, ValidationError
 from bson import ObjectId
 from models.event import Event as Event_model
 from models.user import User as User_model
-from models.sport import Sport as Sport_model
 from utils.auth import Auth
-from models.event import Event as Event_model
-from models.user import User as User_model
 
 
 # pylint: disable=E1101

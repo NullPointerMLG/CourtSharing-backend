@@ -5,7 +5,6 @@ from flask import request
 from mongoengine import DoesNotExist, ValidationError
 from bson import ObjectId
 from models.event import Event as Event_model
-from models.user import User as User_model
 from utils.auth import Auth
 
 # pylint: disable=E1101

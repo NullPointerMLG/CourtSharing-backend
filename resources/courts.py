@@ -1,6 +1,5 @@
-from flask_restful import Resource, reqparse
-from bson.json_util import dumps, loads
-import json
+from flask_restful import Resource
+from bson.json_util import dumps
 from flask import request
 from bson import ObjectId
 import requests

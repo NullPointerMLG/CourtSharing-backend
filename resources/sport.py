@@ -1,4 +1,3 @@
-import json
 from flask_restful import Resource
 from bson.json_util import dumps
 from bson import ObjectId
