@@ -18,24 +18,23 @@ from config import MONGO_URL
 
 mongoengine.connect(alias="default", host=MONGO_URL)
 
-APP = Flask(__name__)
-CORS(APP)
-API = Api(APP)
+app = Flask(__name__)
+CORS(app)
+api = Api(app)
 
 
 # Endpoints
-API.add_resource(Events, '/events')
-API.add_resource(Event, '/events/<string:id>')
-API.add_resource(Login, '/login')
-API.add_resource(Courts, '/courts')
-API.add_resource(Court, '/courts/<string:id>')
-API.add_resource(Sport, '/sports')
-API.add_resource(Transport, '/transports')
-API.add_resource(Parking, '/parkings')
-API.add_resource(Comments, '/comments')
-API.add_resource(Comment, '/comments/<string:id>')
-API.add_resource(Image, '/image')
+api.add_resource(Events, '/events')
+api.add_resource(Event, '/events/<string:id>')
+api.add_resource(Login, '/login')
+api.add_resource(Courts, '/courts')
+api.add_resource(Court, '/courts/<string:id>')
+api.add_resource(Sport, '/sports')
+api.add_resource(Transport, '/transports')
+api.add_resource(Parking, '/parkings')
+api.add_resource(Comments, '/comments')
+api.add_resource(Comment, '/comments/<string:id>')
+api.add_resource(Image, '/image')
 
 if __name__ == '__main__':
-    print("Deploying service in port 5000")
-    APP.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)
