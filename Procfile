@@ -1,1 +1,1 @@
-web: export GOOGLE_APPLICATION_CREDENTIALS="serviceAccountKey.json" && gunicorn app:app
+web: export GOOGLE_APPLICATION_CREDENTIALS="service-account-key.json" && gunicorn app:app
