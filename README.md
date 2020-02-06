@@ -7,6 +7,9 @@ This is a RESTful API service created with Flask, that is consumed by [this clie
 <br/>
 To get more information on how data is consumed, check out the [client](https://github.com/NullPointerMLG/CourtSharing-frontend).
 
+# Where is it running?
+It runs in a heroku repository, you can check it out [here](https://courtsharing-api.herokuapp.com/). However, as it uses firebase oauth in order to return information, you probably won't be able to get too much information from it.
+
 # Installation:
 1. Open a terminal
 2. Create an environment:
