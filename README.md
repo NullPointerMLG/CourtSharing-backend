@@ -1,6 +1,13 @@
 # CourtSharing [Back-end]
 
-Installation:
+# Information
+
+This is a RESTful API service created with Flask, that is consumed by [this client](https://github.com/NullPointerMLG/CourtSharing-frontend).<br/>It gets data from a external service [Datos Abiertos de Málaga](https://datosabiertos.malaga.eu/), it parses it and returns the information to the client.
+<br/>We also use it to store useful information such as user data.
+<br/>
+To get more information on how data is consumed, check out the [client](https://github.com/NullPointerMLG/CourtSharing-frontend).
+
+# Installation:
 1. Open a terminal
 2. Create an environment:
 ```
